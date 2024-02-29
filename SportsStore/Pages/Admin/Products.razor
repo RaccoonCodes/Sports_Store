@@ -30,6 +30,10 @@
                                  href="@GetEditUrl(p.ProductID ?? 0)">
                             Edit
                         </NavLink>
+                        <button class="btn btn-danger btn-sm"
+                                @onclick="@(e => DeleteProduct(p))">
+                            Delete
+                        </button>
                     </td>
                 </tr>
             }
@@ -43,6 +47,7 @@
     </tbody>
 </table>
 <NavLink class="btn btn-primary" href="/admin/products/create">Create</NavLink>
+
 @code {
     public IStoreRepository Repository => Service;
     public IEnumerable<Product> ProductData { get; set; }
@@ -54,6 +59,11 @@
     public async Task UpdateData()
     {
         ProductData = await Repository.Products.ToListAsync();
+    }
+    public async Task DeleteProduct(Product p)
+    {
+        Repository.DeleteProduct(p);
+        await UpdateData();
     }
     public string GetDetailsUrl(long id) => $"/admin/products/details/{id}";
     public string GetEditUrl(long id) => $"/admin/products/edit/{id}";
