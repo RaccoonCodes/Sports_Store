@@ -12,3 +12,4 @@ localhost/?productPage=2 -> localhost/Page2
 
 ## Side Note:
 This Project is in ASP.NET Core MVC.Project Finalized. Description in progress
+ 
