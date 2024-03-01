@@ -11,5 +11,4 @@ ex:
 localhost/?productPage=2 -> localhost/Page2
 
 ## Side Note:
-This Project is in ASP.NET Core MVC. It will be built over time. This just shows
-the basis and the beginning of a Sports Store.
+This Project is in ASP.NET Core MVC.Project Finalized. Description in progress
