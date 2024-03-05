@@ -3,7 +3,10 @@
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Authorization
 
+<!-- Page title and styling -->
 <h3 class="bg-primary text-white text-center p-2">Admin User</h3>
+
+<!-- Display user details in a table -->
 <table class="table table-sm table-striped table-bordered">
     <tbody>
         <tr><th>User</th><td>@Model.AdminUser.UserName</td></tr>
@@ -11,6 +14,7 @@
         <tr><th>Phone</th><td>@Model.AdminUser.PhoneNumber</td></tr>
     </tbody>
 </table>
+
 @functions {
     [Authorize]
     public class IdentityUsersModel : PageModel

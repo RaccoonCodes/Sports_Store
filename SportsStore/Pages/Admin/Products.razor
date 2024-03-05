@@ -1,6 +1,8 @@
 ﻿@page "/admin/products"
 @page "/admin"
+
 @inherits OwningComponentBase<IStoreRepository>
+
 <table class="table table-sm table-striped table-bordered">
     <thead>
         <tr>
@@ -12,8 +14,10 @@
         </tr>
     </thead>
     <tbody>
+        <!-- Check if there are products to display -->
         @if (ProductData?.Count() > 0)
         {
+            <!-- Loop through each product in the ProductData collection -->
             @foreach (Product p in ProductData)
             {
                 <tr>
@@ -22,6 +26,7 @@
                     <td>@p.Category</td>
                     <td>@p.Price.ToString("c")</td>
                     <td>
+                        <!-- Navigation links and button for managing products -->
                         <NavLink class="btn btn-info btn-sm"
                                  href="@GetDetailsUrl(p.ProductID ?? 0)">
                             Details
@@ -40,12 +45,15 @@
         }
         else
         {
+            <!-- Display a message when there are no products -->
             <tr>
                 <td colspan="5" class="text-center">No Products</td>
             </tr>
         }
     </tbody>
 </table>
+
+<!-- Navigation link for creating a new product -->
 <NavLink class="btn btn-primary" href="/admin/products/create">Create</NavLink>
 
 @code {
@@ -65,6 +73,7 @@
         Repository.DeleteProduct(p);
         await UpdateData();
     }
+    <!-- Methods to generate URLs for details and edit pages -->
     public string GetDetailsUrl(long id) => $"/admin/products/details/{id}";
     public string GetEditUrl(long id) => $"/admin/products/edit/{id}";
 }

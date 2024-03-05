@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 namespace SportsStore.Tests
 {
     public class HomeControllerTest{
+        // Test to check if the repository can be used by the controller
         [Fact]
         public void Can_Use_Repository()
         {
@@ -36,6 +37,7 @@ namespace SportsStore.Tests
             Assert.Equal("P2", prodArray[1].Name);
         }
 
+        // Test to check if pagination is working
         [Fact]
         public void Can_Paginate()
         {
@@ -63,6 +65,7 @@ namespace SportsStore.Tests
             Assert.Equal("P5", prodArray[1].Name);
         }
 
+        // Test to check if pagination view model is sent correctly
         [Fact]
         public void Can_Send_Pagination_View_Model()
         {
@@ -91,7 +94,7 @@ namespace SportsStore.Tests
             Assert.Equal(5, pageInfo.TotalItems);
             Assert.Equal(2, pageInfo.TotalPages);
         }
-
+        // Test to generate category-specific product count
         [Fact]
         public void Can_Filter_Products()
         {
@@ -119,7 +122,7 @@ namespace SportsStore.Tests
             Assert.True(result[0].Name == "P2" && result[0].Category == "Cat2");
             Assert.True(result[1].Name == "P4" && result[1].Category == "Cat2");
         }
-
+        // Test to generate category-specific product count
         [Fact]
         public void Generate_Category_Specific_Product_Count()
         {

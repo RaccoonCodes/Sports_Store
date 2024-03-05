@@ -6,13 +6,14 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using SportsStore.Models.ViewModels;
 
 /*
- *The values of the attributes are automatically used to set the tag helper property values, with the 
- *mapping between the HTML attribute name format (page-class-normal) and the C# property name format 
- *(PageClassNormal) taken into account.
+ * This is a custom Tag Helper in an ASP.NET Core application, and 
+ * it is designed to generate HTML for page navigation links based 
+ * on PagingInfo.cs in ViewModels folder
  */
 
 namespace SportsStore.Infrastructure
 {
+    //specifically for div element and attribute page-model
     [HtmlTargetElement("div", Attributes = "page-model")]
     public class PageLinkTagHelper : TagHelper
     {
@@ -21,22 +22,25 @@ namespace SportsStore.Infrastructure
         {
             urlHelperFactory = helperFactory;
         }
+
         [ViewContext]
         [HtmlAttributeNotBound]
         public ViewContext? ViewContext { get; set; }
-        public PagingInfo? PageModel { get; set; }
-        public string? PageAction { get; set; }
+        public PagingInfo? PageModel { get; set; } // paging info model
+        public string? PageAction { get; set; } // action used to generate URL
 
         [HtmlAttributeName(DictionaryAttributePrefix = "page-url-")]
         public Dictionary<string, object> PageUrlValues { get; set; }
             = new Dictionary<string, object>();
 
-
-        public bool PageClassesEnabled { get; set; } = false;
+        //// allow certain CSS to be applied 
+        public bool PageClassesEnabled { get; set; } = false; 
         public string PageClass { get; set; } = String.Empty;
         public string PageClassNormal { get; set; } = String.Empty;
         public string PageClassSelected { get; set; } = String.Empty;
 
+
+        //applies custom css based on the current page
         public override void Process(TagHelperContext context,
         TagHelperOutput output)
         {

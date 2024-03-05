@@ -1,9 +1,12 @@
 ﻿@model IEnumerable<string>
+
+<!-- Container for the navigation menu using Bootstrap's grid system -->
 <div class="d-grid gap-2">
     <a class="btn btn-outline-secondary" asp-action="Index"
        asp-controller="Home" asp-route-category="">
         Home
     </a>
+    <!-- Loop through each category in the model and create buttons -->
     @foreach (string category in Model ?? Enumerable.Empty<string>())
     {
         <a class="btn @(category == ViewBag.SelectedCategory ? "btn-primary": "btn-outline-secondary")"

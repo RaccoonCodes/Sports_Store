@@ -11,6 +11,7 @@ namespace SportsStore.Tests
 {
     public class NavigationMenuViewComponentTests
     {
+        // Test to check if the view component can select categories
         [Fact]
         public void Can_Select_Categories()
         {
@@ -35,6 +36,7 @@ namespace SportsStore.Tests
                 "Oranges", "Plums" }, results));
         }
 
+        // Test to check if the selected category is indicated correctly
         [Fact]
         public void Indicates_Selected_Category()
         {

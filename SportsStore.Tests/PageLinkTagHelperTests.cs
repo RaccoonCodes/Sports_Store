@@ -10,10 +10,13 @@ using SportsStore.Models.ViewModels;
 using Xunit;
 namespace SportsStore.Tests
 {
+
     public class PageLinkTagHelperTests
     {
+        // Test to check if page links can be generated correctly
         [Fact]
-        public void Can_Generate_Page_Links() {
+        public void Can_Generate_Page_Links()
+        {
             // Arrange
             var urlHelper = new Mock<IUrlHelper>();
             urlHelper.SetupSequence(x => x.Action(It.IsAny
@@ -38,6 +41,7 @@ namespace SportsStore.Tests
                 ViewContext = viewContext.Object,
                 PageAction = "Test"
             };
+            // Setting up TagHelperContext and TagHelperOutput for testing
             TagHelperContext ctx = new TagHelperContext(
             new TagHelperAttributeList(),
             new Dictionary<object, object>(), "");

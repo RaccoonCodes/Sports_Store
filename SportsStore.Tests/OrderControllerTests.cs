@@ -7,6 +7,7 @@ namespace SportsStore.Tests
 {
     public class OrderControllerTests
     {
+        // Test to check if checkout is not possible with an empty cart
         [Fact]
         public void Cannot_Checkout_Empty_Cart()
         {
@@ -27,6 +28,8 @@ namespace SportsStore.Tests
             // Assert - check that I am passing an invalid model to the view
             Assert.False(result?.ViewData.ModelState.IsValid);
         }
+        // Test to check if checkout is not possible with invalid shipping details
+
         [Fact]
         public void Cannot_Checkout_Invalid_ShippingDetails()
         {
@@ -48,6 +51,7 @@ namespace SportsStore.Tests
             // Assert - check that I am passing an invalid model to the view
             Assert.False(result?.ViewData.ModelState.IsValid);
         }
+        // Test to check if checkout is possible and order is submitted successfully
         [Fact]
         public void Can_Checkout_And_Submit_Order()
         {

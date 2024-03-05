@@ -1,5 +1,8 @@
 ﻿@page "/admin/products/details/{id:long}"
+
 <h3 class="bg-info text-white text-center p-1">Details</h3>
+
+<!-- Product Details Table -->
 <table class="table table-sm table-bordered table-striped">
     <tbody>
         <tr><th>ID</th><td>@Product?.ProductID</td></tr>
@@ -9,8 +12,12 @@
         <tr><th>Price</th><td>@Product?.Price.ToString("C")</td></tr>
     </tbody>
 </table>
+
+<!-- Edit and Back Navigation Links -->
 <NavLink class="btn btn-warning" href="@EditUrl">Edit</NavLink>
 <NavLink class="btn btn-secondary" href="/admin/products">Back</NavLink>
+
+
 @code {
     [Inject]
     public IStoreRepository? Repository { get; set; }

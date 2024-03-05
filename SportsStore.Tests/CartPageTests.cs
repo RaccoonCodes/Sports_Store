@@ -14,6 +14,7 @@ namespace SportsStore.Tests
 {
     public class CartPageTests
     {
+        // Test to check if the cart can be loaded correctly
         [Fact]
         public void Can_Load_Cart()
         {
@@ -39,7 +40,8 @@ namespace SportsStore.Tests
             Assert.Equal(2, cartModel.Cart.Lines.Count());
             Assert.Equal("myUrl", cartModel.ReturnUrl);
         }
-    
+
+        // Test to check if the cart can be updated correctly
         [Fact]
         public void Can_Update_Cart()
         {

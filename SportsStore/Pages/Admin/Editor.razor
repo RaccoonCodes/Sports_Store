@@ -7,9 +7,15 @@
         font-weight: 500
     }
 </style>
+
 <h3 class="bg-@ThemeColor text-white text-center p-1">@TitleText a Product</h3>
+
+<!-- EditForm for creating or editing a product -->
+
 <EditForm Model="Product" OnValidSubmit="SaveProduct">
     <DataAnnotationsValidator />
+
+    <!-- Display product ID if editing -->
     @if (Product.ProductID != 0)
     {
         <div class="form-group">
@@ -17,6 +23,7 @@
             <input class="form-control" disabled value="@Product.ProductID" />
         </div>
     }
+    <!-- Input fields for product details with validation -->
     <div class="form-group">
         <label>Name</label>
         <ValidationMessage For="@(() => Product.Name)" />
@@ -42,6 +49,7 @@
         <NavLink class="btn btn-secondary" href="/admin/products">Cancel</NavLink>
     </div>
 </EditForm>
+
 @code {
     public IStoreRepository Repository => Service;
     [Inject]
@@ -49,6 +57,8 @@
     [Parameter]
     public long Id { get; set; } = 0;
     public Product Product { get; set; } = new Product();
+
+    // Fetch product details when parameters are set
     protected override void OnParametersSet()
     {
         if (Id != 0)
@@ -57,6 +67,8 @@
             ?? new();
         }
     }
+
+    // SaveProduct method to handle product creation or update
     public void SaveProduct()
     {
         if (Id == 0)
@@ -69,6 +81,9 @@
         }
         NavManager?.NavigateTo("/admin/products");
     }
+    // Determine the color theme based on create or edit operation
     public string ThemeColor => Id == 0 ? "primary" : "warning";
+
+    // Determine the title text based on create or edit operation
     public string TitleText => Id == 0 ? "Create" : "Edit";
 }

@@ -1,4 +1,6 @@
 ﻿@page
+
+<!-- Content section with a thank you message and order details -->
 <div class="text-center">
     <h2>Thanks!</h2>
     <p>Thanks for placing order #@OrderId</p>
@@ -7,6 +9,7 @@
 </div>
 
 @functions {
+    <!-- Binding property for retrieving the order ID from the query string -->
     [BindProperty(SupportsGet = true)]
     public string? OrderId { get; set; }
 }

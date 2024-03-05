@@ -9,12 +9,15 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<StoreDbContext>(opts =>{
     opts.UseSqlServer(builder.Configuration["ConnectionStrings:SportsStoreConnection"]);
 });
+// Add repositories as scoped services
 builder.Services.AddScoped<IStoreRepository,EFStoreRepository>();
 builder.Services.AddScoped<IOrderRepository, EFOrderRepository>();
 
+// Add Razor Pages, Distributed Memory Cache, and Session
 builder.Services.AddRazorPages();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
+
 builder.Services.AddScoped<Cart>(sp => SessionCart.GetCart(sp));
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddServerSideBlazor();
@@ -27,10 +30,14 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 
 var app = builder.Build();
 
+
+// Configure error handling in production
 if (app.Environment.IsProduction())
 {
     app.UseExceptionHandler("/error");
 }
+
+// Configure request localization
 app.UseRequestLocalization(opts => {
     opts.AddSupportedCultures("en-US")
     .AddSupportedUICultures("en-US")
@@ -43,6 +50,7 @@ app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Configure controller routes
 app.MapControllerRoute("catpage","{category}/Page{productPage:int}",
     new { Controller = "Home", action = "Index" });
 

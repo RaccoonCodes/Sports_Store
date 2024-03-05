@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿//adding products
+using Microsoft.EntityFrameworkCore;
 
 namespace SportsStore.Models
 {

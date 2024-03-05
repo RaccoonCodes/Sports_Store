@@ -1,10 +1,13 @@
 ﻿@model Order
 
+<!-- Heading for the checkout page -->
 <h2>Check Out Now</h2>
 <p>Please enter your details, and we'll ship your goods right away!</p>
 
+<!-- Displaying validation summary messages in case of errors -->
 <div asp-validation-summary="All" class="text-danger"></div>
 
+<!-- Form for entering shipping details and options -->
 <form asp-action="Checkout" method="post">
     <h3>Ship to</h3>
     <div class="form-group">
@@ -32,12 +35,16 @@
     <div class="form-group">
         <label>Country:</label><input asp-for="Country" class="form-control" />
     </div>
+
+    <!-- Options section -->
     <h3>Options</h3>
     <div class="checkbox">
         <label>
             <input asp-for="GiftWrap" /> Gift wrap these items
         </label>
     </div>
+
+    <!-- Submit button to complete the order -->
     <div class="text-center">
         <input class="btn btn-primary" type="submit" value="Complete Order" />
     </div>

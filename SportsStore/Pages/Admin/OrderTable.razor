@@ -1,10 +1,13 @@
 ﻿<table class="table table-sm table-striped table-bordered">
+
     <thead>
         <tr><th colspan="5" class="text-center">@TableTitle</th></tr>
     </thead>
     <tbody>
+        <!-- Check if there are orders to display -->
         @if (Orders?.Count() > 0)
         {
+            <!-- Loop through each order in the Orders collection -->
             @foreach (Order o in Orders)
             {
                 <tr>
@@ -13,12 +16,14 @@
                     <th>Product</th>
                     <th>Quantity</th>
                     <td>
+                        <!-- Button to perform an action on the order -->
                         <button class="btn btn-sm btn-danger"
                                 @onclick="@(e => OrderSelected.InvokeAsync(o.OrderID))">
                             @ButtonLabel
                         </button>
                     </td>
                 </tr>
+                <!-- Nested loop to display order lines (CartLines) -->
                 @foreach (CartLine line in o.Lines)
                 {
                     <tr>
@@ -32,6 +37,7 @@
         }
         else
         {
+            <!-- Display a message when there are no orders -->
             <tr><td colspan="5" class="text-center">No Orders</td></tr>
         }
     </tbody>

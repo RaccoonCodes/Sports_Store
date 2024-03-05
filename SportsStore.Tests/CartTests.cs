@@ -5,6 +5,7 @@ namespace SportsStore.Tests
 {
     public class CartTests
     {
+        // Test to check if new lines can be added to the cart
         [Fact]
         public void Can_Add_New_Lines()
         {
@@ -22,6 +23,8 @@ namespace SportsStore.Tests
             Assert.Equal(p1, results[0].Product);
             Assert.Equal(p2, results[1].Product);
         }
+
+        // Test to check if new lines can be added to the cart
         [Fact]
         public void Can_Add_Quantity_For_Existing_Lines()
         {
@@ -41,6 +44,8 @@ namespace SportsStore.Tests
             Assert.Equal(11, results[0].Quantity);
             Assert.Equal(1, results[1].Quantity);
         }
+
+        // Test to check if a line can be removed from the cart
         [Fact]
         public void Can_Remove_Line()
         {
@@ -61,6 +66,8 @@ namespace SportsStore.Tests
             Assert.Empty(target.Lines.Where(c => c.Product == p2));
             Assert.Equal(2, target.Lines.Count());
         }
+
+        // Test to calculate the total value of the cart
         [Fact]
         public void Calculate_Cart_Total()
         {
@@ -77,6 +84,8 @@ namespace SportsStore.Tests
             // Assert
             Assert.Equal(450M, result);
         }
+
+        // Test to check if the cart contents can be cleared
         [Fact]
         public void Can_Clear_Contents()
         {

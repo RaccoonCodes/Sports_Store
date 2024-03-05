@@ -1,26 +1,32 @@
 ﻿@inherits LayoutComponentBase
+
 <div class="bg-info text-white p-2">
     <div class="container-fluid">
         <div class="row">
             <div class="col">
+                <!--Sports store administartion Header-->
                 <span class="navbar-brand ml-2">SPORTS STORE Administration</span>
             </div>
             <div class="col-2 text-right">
+                <!-- Log Out Button -->
                 <a class="btn btn-sm btn-primary" href="/account/logout">Log Out</a>
             </div>
         </div>
     </div>
 </div>
+<!--Main Content-->
 <div class="container-fluid">
     <div class="row p-2">
         <div class="col-3">
             <div class="d-grid gap-1">
+                <!--Nav Left side-->
                 <NavLink class="btn btn-outline-primary"
                          href="/admin/products"
                          ActiveClass="btn-primary text-white"
                          Match="NavLinkMatch.Prefix">
                     Products
                 </NavLink>
+                <!-- Navigation Link for Orders -->
                 <NavLink class="btn btn-outline-primary"
                          href="/admin/orders"
                          ActiveClass="btn-primary text-white"
@@ -28,6 +34,7 @@
                     Orders
                 </NavLink>
             </div>
+            <!-- Main Content Column (Right) -->
         </div>
         <div class="col">
             @Body

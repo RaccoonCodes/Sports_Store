@@ -2,6 +2,7 @@
 @{
     Layout = null;
 }
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,24 +10,36 @@
     <title>SportsStore</title>
     <link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 </head>
+
 <body>
+    <!-- Navigation bar with Sports Store branding -->
     <div class="bg-dark text-white p-2">
         <span class="navbar-brand ml-2">SPORTS STORE</span>
     </div>
+
+    <!-- Main content section -->
     <div class="m-1 p-1">
+        <!-- Validation summary for displaying all validation errors -->
         <div class="text-danger" asp-validation-summary="All"></div>
+        
+        <!-- Login form with Name and Password fields -->
         <form asp-action="Login" asp-controller="Account" method="post">
             <input type="hidden" asp-for="ReturnUrl" />
+            <!-- Form group for the Name field -->
             <div class="form-group">
                 <label asp-for="Name"></label>
                 <div asp-validation-for="Name" class="text-danger"></div>
                 <input asp-for="Name" class="form-control" />
             </div>
+
+            <!-- Form group for the Password field -->
             <div class="form-group">
                 <label asp-for="Password"></label>
                 <div asp-validation-for="Password" class="text-danger"></div>
                 <input asp-for="Password" type="password" class="form-control" />
             </div>
+
+            <!-- Submit button for logging in -->
             <button class="btn btn-primary mt-2" type="submit">Log In</button>
         </form>
     </div>
