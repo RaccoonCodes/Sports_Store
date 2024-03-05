@@ -1,15 +1,19 @@
-# Sports Store
+# Sports Store Description
 
-This Version focuses more on back-end work such as: 
-- Adding data to App
-- Displaying Products to App
-- Adding Pagination
-- Minor stylizing W/ Bootstrap
+This a take on online product shopping where users can browse catalogues and pages. It also include a shopping cart that allows users to remove or add items and proceed to checkout where they need to enter shipping information. There is also an administartion page that includes create, read, update, and delete (or CRUD) for managements. A login is required to access this page. Obviously this a made up store, so to access it, on the end of the url, add "/admin" when the project is running and its credentials are
 
-This project also includes Unit Testing with xUnit along with Improved URL display
-ex:
-localhost/?productPage=2 -> localhost/Page2
+name: admin
 
-## Side Note:
-This Project is in ASP.NET Core MVC. It will be built over time. This just shows
-the basis and the beginning of a Sports Store.
+pass: Secret123$
+
+Along with development of this project, There are Unit testing using xunit and Moq packages.
+Each section in this README will contain a description on what each file, function, and classes does.
+
+**This is all in ASP.NET Core MVC with Bootstrap 5 and Font Awesome**
+**Description of what each class does are commented on each files. Any Notes will be posted in this README.**
+
+**WORK IN PROGRESS**
+
+
+
+ 
