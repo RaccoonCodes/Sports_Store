@@ -1,10 +1,40 @@
 # Sports Store Description
+## Table of Contents
+1. [Introduction](#introduction)
+2. [Installation](#installation)
+3. [Frontend and Backend Technologies](#frontend-and-backend-technologies)
+4. [Models](#models)
+    - [StoreDbContext](#storedbcontext)
+    - [SessionCart](#sessioncart)
+    - [Order](#order)
+    - [IOrderRepository](#iorderrepository)
+    - [EFOrderRepository](#eforderrepository)
+    - [IStoreRepository](#istorerepository)
+    - [EFStoreRepository](#efstorerepository)
+    - [AppIdentityDbContext](#appidentitydbcontext)
+5. [Views](#views)
+    - [Login.cshtml](#logincshtml)
+    - [Index.cshtml](#indexcshtml)
+    - [Checkout.cshtml](#checkoutcshtml)
+    - [Default.cshtml (Partial View)](#defaultcshtml-partial-view)
+6. [Controller](#controller)
+    - [Account Controller](#account-controller)
+    - [Home Controller](#home-controller)
+    - [Order Controller](#order-controller)
+7. [Infrastructure](#infrastructure)
+    - [PageLinkHelper](#pagelinkhelper)
+    - [SessionExtensions](#sessionextensions)
+    - [UrlExtensions](#urlextensions)
+8. [Testing Unit](#testing-unit)
+    - [OrderControllerTest](#ordercontrollertest)
+    - [NavigationMenuViewComponentTests](#navigationmenuviewcomponenttests)
+9. [Summary](#summary)
 
 ## Introduction
 
 This project is a Sport Store application built using ASP.NET Core. It allows users to browse, add, and remove products from their shopping cart, and place orders.
 
-There is also an administartion page that includes create, read, update, and delete (or CRUD) for managements. A login is required to access this page. Along with development of this project, There are Unit testing using xunit and Moq packages. To access it, on the end of the url, add "/admin" when the project is running and its credentials are
+There is also an administartion page that includes create, read, update, and delete (or CRUD) for managements. A login is required to access this page. Along with development of this project, There are Unit testing using xunit and Moq packages. To access admin page, on the end of the url, add "/admin" when the project is running and its credentials are
 
 name: admin
 
@@ -18,7 +48,7 @@ pass: Secret123$
 4) might need to run the database migration to create the needed tables. If so, run the command, "dotnet ef database update".
 5) Run and navigate Page, There is an admin page and to access it, add "/admin" at the end of the URL when first running the page.
 
-**All work is Finalized and commented on each files where needed. Final updated work was on 3/4/2024**
+#### **All work is Finalized and commented on each files where needed. Final updated work was on 3/4/2024**
 
  ## Front and back End
 - ASP.NET Core MVC: The web framework used for building the application.
@@ -614,5 +644,171 @@ namespace SportsStore.Infrastructure
 ```
 - The UrlExtensions class provides an extension method PathAndQuery for the HttpRequest object. This method concatenates the path and the query string if present. If there is no query string, it returns the path as a string.
 
+# Testing Unit
+The Unit Testing Used are Xunit and Moq. Below I Will showcase two Different unit testing.
 
-**README FILE IN PROGRESS
+### OrderControllerTest
+This file contains comprehensive unit tests for the OrderController class, which manages the checkout process. It ensures that the checkout functionality behaves appropriately under different scenarios:
+
+```csharp
+/**Other Testing Methods***/
+// Test to check if checkout is not possible with an empty cart
+[Fact]
+public void Cannot_Checkout_Empty_Cart()
+{
+    // Arrange - create a mock repository
+    Mock<IOrderRepository> mock = new Mock<IOrderRepository>();
+    // Arrange - create an empty cart
+    Cart cart = new Cart();
+    // Arrange - create the order
+    Order order = new Order();
+    // Arrange - create an instance of the controller
+    OrderController target = new OrderController(mock.Object, cart);
+    // Act
+    ViewResult? result = target.Checkout(order) as ViewResult;
+    // Assert - check that the order hasn't been stored
+    mock.Verify(m => m.SaveOrder(It.IsAny<Order>()), Times.Never);
+    // Assert - check that the method is returning the default view
+    Assert.True(string.IsNullOrEmpty(result?.ViewName));
+    // Assert - check that I am passing an invalid model to the view
+    Assert.False(result?.ViewData.ModelState.IsValid);
+}
+/**Other Testing Methods***/
+```
+- This test verifies that checkout is not possible when the cart is empty. It sets up a mock repository and an empty cart, then checks that the order is not stored and the view returned is the default view with invalid model state.
+
+```csharp
+/**Other Testing Methods***/
+[Fact]
+public void Can_Checkout_And_Submit_Order()
+{
+    // Arrange - create a mock order repository
+    Mock<IOrderRepository> mock = new Mock<IOrderRepository>();
+    // Arrange - create a cart with one item
+    Cart cart = new Cart();
+    cart.AddItem(new Product(), 1);
+    // Arrange - create an instance of the controller
+    OrderController target = new OrderController(mock.Object, cart);
+    // Act - try to checkout
+    RedirectToPageResult? result =
+    target.Checkout(new Order()) as RedirectToPageResult;
+    // Assert - check that the order has been stored
+    mock.Verify(m => m.SaveOrder(It.IsAny<Order>()), Times.Once);
+    // Assert - check that the method is redirecting to the Completed action
+    Assert.Equal("/Completed", result?.PageName);
+}
+/**Other Testing Methods***/
+```
+- This test ensures that checkout is possible, and an order can be submitted successfully. It sets up a mock order repository, creates a cart with one item, and checks that the order is stored correctly and the method redirects to the completed action.
+
+```csharp
+/**Other Testing Methods***/
+ [Fact]
+ public void Cannot_Checkout_Invalid_ShippingDetails()
+ {
+     // Arrange - create a mock order repository
+     Mock<IOrderRepository> mock = new Mock<IOrderRepository>();
+     // Arrange - create a cart with one item
+     Cart cart = new Cart();
+     cart.AddItem(new Product(), 1);
+     // Arrange - create an instance of the controller
+     OrderController target = new OrderController(mock.Object, cart);
+     // Arrange - add an error to the model
+     target.ModelState.AddModelError("error", "error");
+     // Act - try to checkout
+     ViewResult? result = target.Checkout(new Order()) as ViewResult;
+     // Assert - check that the order hasn't been passed stored
+     mock.Verify(m => m.SaveOrder(It.IsAny<Order>()), Times.Never);
+     // Assert - check that the method is returning the default view
+     Assert.True(string.IsNullOrEmpty(result?.ViewName));
+     // Assert - check that I am passing an invalid model to the view
+     Assert.False(result?.ViewData.ModelState.IsValid);
+ }
+/**Other Testing Methods***/
+```
+- This test confirms that checkout is not possible with invalid shipping details. It mocks the order repository and creates a cart with one item. It then adds an error to the model and checks that the order is not stored and the view returned is the default view with invalid model state.
+
+### NavigationMenuViewComponentTests
+This file contains meticulous unit tests for the NavigationMenuViewComponent class, responsible for rendering the navigation menu with product categories. These tests validate that the navigation menu behaves correctly:
+```csharp
+/**Other Testing Methods***/
+[Fact]
+public void Can_Select_Categories()
+{
+    // Arrange
+    Mock<IStoreRepository> mock = new Mock<IStoreRepository>();
+    mock.Setup(m => m.Products).Returns((new Product[] {
+     new Product {ProductID = 1, Name = "P1",Category = "Apples"},
+     new Product {ProductID = 2, Name = "P2",Category = "Apples"},
+     new Product {ProductID = 3, Name = "P3",Category = "Plums"},
+     new Product {ProductID = 4, Name = "P4",Category = "Oranges"},
+     }).AsQueryable<Product>());
+    NavigationMenuViewComponent target =
+    new NavigationMenuViewComponent(mock.Object);
+
+    // Act = get the set of categories
+    string[] results = ((IEnumerable<string>?)(target.Invoke()
+    as ViewViewComponentResult)?.ViewData?.Model
+    ?? Enumerable.Empty<string>()).ToArray();
+
+    // Assert
+    Assert.True(Enumerable.SequenceEqual(new string[] { "Apples",
+        "Oranges", "Plums" }, results));
+}
+/**Other Testing Methods***/
+```
+- This test confirms that the view component can select categories accurately. It sets up a mock repository with sample products and asserts that the categories are selected correctly based on the product data.
+```csharp
+/**Other Testing Methods***/
+[Fact]
+public void Indicates_Selected_Category()
+{
+    // Arrange
+    string categoryToSelect = "Apples";
+    Mock<IStoreRepository> mock = new Mock<IStoreRepository>();
+    mock.Setup(m => m.Products).Returns((new Product[] {
+     new Product {ProductID = 1, Name = "P1", Category = "Apples"},
+     new Product {ProductID = 4, Name = "P2", Category = "Oranges"},
+     }).AsQueryable<Product>());
+    NavigationMenuViewComponent target =
+    new NavigationMenuViewComponent(mock.Object);
+    
+    target.ViewComponentContext = new ViewComponentContext
+    {
+        ViewContext = new ViewContext
+        {
+            RouteData = new Microsoft.AspNetCore.Routing.RouteData()
+        }
+    };
+    target.RouteData.Values["category"] = categoryToSelect;
+   
+    // Action
+    string? result = (string?)(target.Invoke()
+    as ViewViewComponentResult)?.ViewData?["SelectedCategory"];
+
+    // Assert
+    Assert.Equal(categoryToSelect, result);
+}
+/**Other Testing Methods***/
+```
+- This test verifies that the selected category is indicated correctly in the navigation menu. It sets up a mock repository with sample products, specifies a selected category, and checks that the selected category is correctly indicated in the rendered navigation menu.
+
+# Summary
+The Sports Store application is a comprehensive e-commerce platform built using ASP.NET Core, offering a wide range of sports products for users to browse, add to cart, and purchase. The project utilizes various frontend and backend technologies, including ASP.NET Core MVC, Entity Framework Core, Identity Framework, Bootstrap 5, and Font Awesome for design and functionality.
+
+## Key Features:
+- User Authentication and Authorization: The application includes user authentication and authorization functionalities provided by Identity Framework, ensuring secure access to user-specific features and data.
+
+- Product Management: Users can browse through a collection of sports products, view product details, and add products to their shopping cart.
+
+- Shopping Cart: The application provides a seamless shopping experience with a persistent shopping cart, allowing users to add, remove, and update items in their cart before checkout.
+
+- Order Placement: Users can proceed to checkout, enter their shipping details, and place orders. Orders are securely stored in the database for future reference.
+
+- Admin Panel: The application includes an administration panel accessible to authorized users, allowing for CRUD (Create, Read, Update, Delete) operations on products and orders.
+
+- Unit Testing: Unit tests are implemented using Xunit and Moq, ensuring the reliability and correctness of the application's functionalities.
+
+
+
+  
