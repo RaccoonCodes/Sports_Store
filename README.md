@@ -2,7 +2,7 @@
 ## Table of Contents
 1. [Introduction](#introduction)
 2. [Installation](#installation)
-3. [Frontend and Backend Technologies](#frontend-and-backend-technologies)
+3. [Frontend and Backend](#front-and-back-end)
 4. [Models](#models)
     - [StoreDbContext](#storedbcontext)
     - [SessionCart](#sessioncart)
