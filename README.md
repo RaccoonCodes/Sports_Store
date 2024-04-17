@@ -470,7 +470,7 @@ namespace SportsStore.Controllers
 - Index: Retrieves a list of products based on the specified category, orders them, and applies pagination using the Skip and Take methods.
 
 ### Order Controller
-```cshtml
+```csharp
 namespace SportsStore.Controllers
 {
     public class OrderController : Controller
@@ -512,5 +512,107 @@ namespace SportsStore.Controllers
 - Checkout: Renders the checkout view and allows users to enter their shipping details.
 - Checkout (HttpPost): Checks if the shopping cart is empty. If not, populates the order information and saves it to the repository. Clears the cart after a successful order placement.
 
-  
+## Infrastructure
+Infrastures are utilitties and helper classes that support the main application of this project. Below are the classes that help out the project.
+### PageLinkHelper
+```csharp
+namespace SportsStore.Infrastructure
+{
+    //specifically for div element and attribute page-model
+    [HtmlTargetElement("div", Attributes = "page-model")]
+    public class PageLinkTagHelper : TagHelper
+    {
+        private IUrlHelperFactory urlHelperFactory;
+        public PageLinkTagHelper(IUrlHelperFactory helperFactory)
+        {
+            urlHelperFactory = helperFactory;
+        }
+
+        [ViewContext]
+        [HtmlAttributeNotBound]
+        public ViewContext? ViewContext { get; set; }
+        public PagingInfo? PageModel { get; set; } // paging info model
+        public string? PageAction { get; set; } // action used to generate URL
+
+        [HtmlAttributeName(DictionaryAttributePrefix = "page-url-")]
+        public Dictionary<string, object> PageUrlValues { get; set; }
+            = new Dictionary<string, object>();
+
+        //// allow certain CSS to be applied 
+        public bool PageClassesEnabled { get; set; } = false; 
+        public string PageClass { get; set; } = String.Empty;
+        public string PageClassNormal { get; set; } = String.Empty;
+        public string PageClassSelected { get; set; } = String.Empty;
+
+
+        //applies custom css based on the current page
+        public override void Process(TagHelperContext context,
+        TagHelperOutput output)
+        {
+            if (ViewContext != null && PageModel != null)
+            {
+                IUrlHelper urlHelper = urlHelperFactory.GetUrlHelper(ViewContext);
+                TagBuilder result = new TagBuilder("div");
+                for (int i = 1; i <= PageModel.TotalPages; i++)
+                {
+                    TagBuilder tag = new TagBuilder("a");
+                    PageUrlValues["productPage"] = i;
+                    tag.Attributes["href"] = urlHelper.Action(PageAction,
+                    PageUrlValues);
+
+                    if (PageClassesEnabled)
+                    {
+                        tag.AddCssClass(PageClass);
+                        tag.AddCssClass(i == PageModel.CurrentPage
+                         ? PageClassSelected : PageClassNormal);
+                    }
+                    tag.InnerHtml.Append(i.ToString());
+                    result.InnerHtml.AppendHtml(tag);
+                }
+                output.Content.AppendHtml(result.InnerHtml);
+            }
+        }
+    }
+}
+
+```
+- custom Tag Helper designed to generate HTML for page navigation links based on the Pagination.
+- process: Generates HTML for navigation links based on PageModel and Page Action. It also allows css to be applied based on the selected page.
+
+### SessionExtensions
+```csharp
+namespace SportsStore.Infrastructure
+{
+    public static class SessionExtensions
+    {
+        public static void SetJson(this ISession session, string key, object value)
+        {
+            session.SetString(key, JsonSerializer.Serialize(value));
+        }
+
+        public static T? GetJson<T>(this ISession session, string key)
+        {
+            var sessionData = session.GetString(key);
+            return sessionData == null
+            ? default(T) : JsonSerializer.Deserialize<T>(sessionData);
+        }
+    }
+}
+
+```
+- class provides extension methods for Serializing and seserializing object into JSON format for Session storing
+### UrlExtensions
+```csharp
+namespace SportsStore.Infrastructure
+{
+    public static class UrlExtensions{
+        public static string PathAndQuery(this HttpRequest request) =>
+            request.QueryString.HasValue ? $"{request.Path}{request.QueryString}"
+            : request.Path.ToString();
+    }
+}
+```
+- The UrlExtensions class provides an extension method PathAndQuery for the HttpRequest object. This method concatenates the path and the query string if present. If there is no query string, it returns the path as a string.
+
+
 **README FILE IN PROGRESS
