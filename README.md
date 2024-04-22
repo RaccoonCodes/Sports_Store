@@ -45,8 +45,10 @@ pass: Secret123$
 1) clone this repo
 2) Open Visual Studio or preferred code editor.
 3) Download and Update any NuGet Package Dependencies.
-4) might need to run the database migration to create the needed tables. If so, run the command, "dotnet ef database update".
-5) Run and navigate Page, There is an admin page and to access it, add "/admin" at the end of the URL when first running the page.
+4) might need to run the database migration to create the needed tables. If so, run the command:
+   1) "dotnet ef migrations add Initial"
+   2) "dotnet ef database update"
+6) Run and navigate Page, There is an admin page and to access it, add "/admin" at the end of the URL when first running the page.
 
 #### **All work is Finalized and commented on each files where needed. Final updated work was on 3/4/2024**
 
